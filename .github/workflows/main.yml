@@ -57,7 +57,7 @@ jobs:
             echo "ERROR: RUN_ID is empty!"
             exit 1
           fi
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc" --env-manager=local
+          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc"
 
       # Login to Docker Hub
       - name: Log in to Docker Hub
