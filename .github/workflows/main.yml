@@ -44,14 +44,20 @@ jobs:
       # Get latest run_id
       - name: Get latest MLflow run_id
         run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | rev | cut -d'/' -f2 | rev)
+          LATEST_PATH=$(ls -td mlruns/0/*/ | head -n 1)
+          RUN_ID=$(basename $LATEST_PATH)
+          
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
           
       # Build Docker Model
       - name: Build Docker Model
         run: |
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc" 
+          if [ -z "$RUN_ID" ]; then
+            echo "ERROR: RUN_ID is empty!"
+            exit 1
+          fi
+          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc" --env-manager=local
 
       # Login to Docker Hub
       - name: Log in to Docker Hub
