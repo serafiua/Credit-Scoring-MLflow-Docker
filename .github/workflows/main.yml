@@ -39,12 +39,12 @@ jobs:
       # Run as a mlflow project
       - name: Run mlflow project
         run: |
-          mlflow run MLproject --env-manager=local 
+          python MLproject/modelling.py 505 35 MLproject/train_pca.csv 
       
       # Get latest run_id
       - name: Get latest MLflow run_id
         run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | rev | cut -d'/' -f2 | rev)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
           
